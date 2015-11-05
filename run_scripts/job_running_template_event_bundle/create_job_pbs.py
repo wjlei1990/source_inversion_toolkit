@@ -14,7 +14,7 @@ import math
 import re
 
 # User parameter
-nevents_per_job = 3
+nevents_per_job = 1
 nnodes_per_job = 384
 walltime = "%d:00:00" % int(2*nevents_per_job)
 eventlist_file = "./XEVENTID"

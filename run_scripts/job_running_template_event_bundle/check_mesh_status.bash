@@ -19,20 +19,20 @@ ntype=${#ext[@]}
 
 echo 
 echo "Check Mesh Status..."
-echo
 
 event_unfinished=0
 for (( event_index=1; event_index<=$nevents; event_index++ ))
 do
   event_index_name=`printf "%03d" $event_index`
   ### loop over event
-  echo "event: $line  event_index: $event_index_name"
-  echo "mesh center: $meshcenter"
+  echo "-------------"
+  echo "event_index: $event_index_name"
   job_unfinished=0
   for type in "${ext[@]}"
   do
     ### loop over type
     #echo "type:$type"
+    echo "dir: $targetdir"
     targetdir=$workdir"/event_"$event_index_name$type"/DATABASES_MPI"
     #echo "targetdir: $targetdir"
 
