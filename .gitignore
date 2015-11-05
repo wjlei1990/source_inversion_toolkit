@@ -64,3 +64,5 @@ job_test_benchmark*
 DATA/event_*
 *.OU
 *.swp
+xspecfem3D
+*.o
