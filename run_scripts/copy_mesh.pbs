@@ -1,0 +1,86 @@
+#!/bin/bash
+# ###########################################################################
+# Batch script to move mesh file to sub workding directory using dtn
+# This script first check if in the target directory the mesh file exist
+# If mesh files exist, it just skip that dir; if not, it copies again
+# Usage: qsub -q dtn copy_mesh.pbs
+# ###########################################################################
+
+#PBS -A GEO111
+#PBS -l walltime=20:00:00
+#PBS -j oe
+#PBS -o copy_mesh.$PBS_JOBID.o
+#PBS -l nodes=1
+
+# #################
+meshcenter="../MODEL_GLOBAL"
+
+workdir="../DATA"
+
+index_start=1
+index_end=10
+
+#ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
+ext=( "" )
+# #################
+
+cd $PBS_O_WORKDIR
+
+nevents=$(( $index_end - $index_start + 1 ))
+
+### check the number of events
+echo "number of events: $nevents"
+if [ $nevents -eq 0 ]; then
+  echo "0 event. Check XEVENTID file!"
+  exit
+else 
+  echo "Nevents: $nevents"
+fi
+
+
+if [ ! -f $eventfile ]; then
+  echo WRONG! NO $eventfile
+  exit
+fi
+
+echo 
+echo "Copy Mesh Begin"
+echo "Index range: [$index_start, $index_end]"
+echo
+
+#copy the mesh file
+for (( event_index=$index_start; event_index<=$index_end; event_index++ ))
+do
+  event_index_name=`printf "%03d" $event_index`
+  ### loop over event
+  echo
+  echo "event_index: $event_index_name"
+  echo "mesh center: $meshcenter"
+  for type in "${ext[@]}"
+  do
+    ### loop over type
+    echo "type:$type"
+    targetdir=$workdir"/event_"$event_index_name$type"/DATABASES_MPI"
+    echo "targetdir: $targetdir"
+
+    if [ ! -d $targetdir ]; then
+      echo "Dir not exist: $targetdir"
+      exit
+    fi
+    #copy mesh files if they has not been copied
+    n_meshfile=`ls $targetdir | wc -l`
+    #if [ ! -f $targetdir/proc*.bin ]; then
+    if [ $n_meshfile -le 5 ]; then
+      echo "MESH FILE NOT EXISTS! COPY..."
+      cp $meshcenter/* $targetdir
+    else
+      echo "MESH FILE EXISTS! DONE"
+    fi
+    echo
+  done
+
+done 
+
+echo 
+echo "Copy Mesh Done"
+echo

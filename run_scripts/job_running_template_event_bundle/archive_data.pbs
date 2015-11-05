@@ -1,0 +1,106 @@
+#!/bin/bash
+############################################################################
+# Batch script to copy the OUTPUT file of simulation to archive using dtn
+# ###
+# Frist, it copies all the file to the temp place.
+# Second,then using HTAR to tar and copy files to the archive dir
+# Third, it moves all the files to a final place(for future use)
+# ###
+############################################################################
+
+#PBS -A GEO111
+#PBS -l walltime=20:00:00
+#PBS -j oe
+#PBS -o archive.$PBS_JOBID.o
+
+#######################
+#workdir=$MEMBERWORK/geo018/SOURCE_INVERSION/DATA
+workdir="../../DATA"
+
+eventfile="XEVENTID_test"
+
+tempdir="./data"
+
+finaldir="../../Archive"
+
+ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
+#######################
+
+cd $PBS_O_WORKDIR
+
+mkdir -p $tempdir
+
+### check the number of events
+nevents=`cat $eventfile | wc -l`
+echo "number of events: $nevents"
+if [ $nevents -eq 0 ]; then
+  echo "0 event. Check XEVENTID file!"
+  exit
+else 
+  echo "Nevents: $nevents"
+fi
+
+if [ ! -f $eventfile ]; then
+  echo WRONG! NO $eventfile
+  exit
+fi
+
+echo 
+echo "Move OUTPUT_FILES Begin..."
+echo
+
+#copy the mesh file
+count=0
+event_index=0
+for line in `cat $eventfile`
+do
+  event_index=$(( $event_index + 1 ))
+  event_index_name=`printf "%03d" $event_index`
+  ### loop over event
+  echo
+  echo "event: $line  event_index: $event_index_name"
+  for type in "${ext[@]}"
+  do
+    ### loop over type
+    echo "type:$type"
+    origindir=$workdir"/event_"$event_index_name$type"/OUTPUT_FILES"
+    destdir=$tempdir"/"$line$type
+    echo "origintdir: $origindir"
+    echo "destdir: $destdir"
+    mkdir -p $destdir
+
+    if [ ! -d $targetdir ]; then
+      echo "Dir not exist: $origindir"
+      stop
+    fi
+    
+    #copy OUTPUT_FILES to tempdir
+    #cp -r $origindir $destdir
+    mv $origindir/* $destdir/
+    echo "mv $origindir/* $destdir"
+    count=$(( $count+1 ))
+    echo
+  done
+done
+
+#HTAR file
+date_string=`date +"%m-%d-%y_%T"`
+tarfile="/home/lei/SOURCE_INVERSION/DATA/data_$date_string.tar"
+echo $tarfile > archive.log
+echo "pwd:`pwd`"
+echo "htar -cf $tarfile $tempdir"
+#htar -cf $tarfile $tempdir
+
+echo 
+echo "Archive OUTPUT_FILES Done"
+echo
+
+echo "Move data to final place"
+echo "mv $tempdir/* $finaldir"
+mv $tempdir/* $finaldir
+
+
+echo -e "\n***********************************"
+echo "Summary: "
+echo "Total event: $nevents Success: $count"
+echo -e "***********************************\n"
