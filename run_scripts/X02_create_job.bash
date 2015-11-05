@@ -4,6 +4,12 @@
 # so you make use of it directly.
 # #########################################################
 
+echo "======================================"
+echo "Split large eventlist into small(workable) ones"
+./split_eventlist.py
+
+echo "======================================"
+echo "Create job submission sub folder"
 # User parameter
 tag="test_benchmark"
 job_template_dir="job_running_template_event_bundle"

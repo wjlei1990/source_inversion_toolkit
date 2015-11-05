@@ -55,4 +55,8 @@ do
 
 done
 
-
+echo "+++++++++++++++++++++++++++++++++++++++"
+echo "+           IMPORTANT                 +"
+echo "+PLEASE COPY MODEL FILES INTO RUNBASE +"
+echo "+Use: qsub -q dtn copy_mesh.pbs       +"
+echo "+++++++++++++++++++++++++++++++++++++++"
