@@ -55,3 +55,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Wenjie
+job_split_list
+job_test_benchmark*
+*.bp
+*.bin

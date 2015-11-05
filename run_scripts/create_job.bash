@@ -5,7 +5,7 @@
 # #########################################################
 
 # User parameter
-tag="ebru_benchmark"
+tag="test_benchmark"
 job_template_dir="job_running_template_event_bundle"
 
 njobs=`ls job_split_list/* | wc -l`

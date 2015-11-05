@@ -13,7 +13,7 @@ import math
 import sys
 
 # #########################
-inputfile = "XEVENTID_ALL"
+inputfile = "example_files/XEVENTID_ALL"
 njobs_bundle = 50
 outputdir = "job_split_list"
 output_base = "XEVENTID_"
