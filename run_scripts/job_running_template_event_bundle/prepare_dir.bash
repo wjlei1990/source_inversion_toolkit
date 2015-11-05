@@ -11,15 +11,15 @@
 #scratch_dir="$PROJWORK/geo018/Wenjie/SOURCE_INVERSION"
 scratch_dir="../.."
 
-home_dir="/ccs/home/lei/SOURCE_INVERSION"
-
 eventfile="XEVENTID"
 
-cmtcenter="$home_dir/CMT_BIN/ALL_CMT"
-specfem_dir="/lustre/atlas/proj-shared/geo111/Wenjie/bm_specfem/si_database"
+cmtcenter="/ccs/home/lei/SOURCE_INVERSION/CMT_BIN/ALL_CMT"
 
+specfem_dir="$scratch_dir/specfem_stuff"
 datacenter="$scratch_dir/DATA"
-ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
+
+#ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
+ext=( "" )
 ########################
 
 date_string=`date +"%m-%d-%y_%H"`
@@ -49,15 +49,16 @@ do
   ### loop over event
   job_index=$(( $job_index+1 ))
   job_index_name=`printf "%03d" $job_index`
-  echo "event_ name: $line  job_index_name: $job_index_name"
+  echo "----------------------"
+  echo "event_name: $line  job_index_name: $job_index_name"
   for type in "${ext[@]}"
   do
     ### loop over type
     echo "type:$type"
     cmtfile=$cmtcenter"/"$line"$type"
     dir=$datacenter"/event_"$job_index_name"$type"
-    echo $cmtfile
-    echo $dir
+    echo "cmtfile:" $cmtfile
+    echo "target dir:" $dir
     if [ ! -f $cmtfile ]; then
       echo WRONG! no $cmtfile
     fi
@@ -65,43 +66,22 @@ do
     #  echo "Dir not exists: $dir!"
     #fi
     #make simulation dir and copy files
-    mkdir -p $dir/DATA
-    mkdir -p $dir/bin
-    mkdir -p $dir/OUTPUT_FILES
-    mkdir -p $dir/DATABASES_MPI
+    rm -r $dir/DATA
+    rm -r $dir/bin
+    rm -r $dir/OUTPUT_FILES
 
-    rm -rf $dir/OUTPUT_FILES/*
-    rm -rf $dir/DATA/*
+    cp -r $specfem_dir/DATA $dir
+    cp -r $specfem_dir/bin $dir
+    cp -r $specfem_dir/OUTPUT_FILES $dir
 
-    cp $specfem_dir/DATA/Par_file $dir/DATA/
-    cp $specfem_dir/OUTPUT_FILES/values_from_mesher.h $dir/OUTPUT_FILES/
-
-    cp $specfem_dir/DATA/STATIONS $dir/DATA/
     cp $cmtfile $dir/DATA/CMTSOLUTION
 
-    cp $specfem_dir/OUTPUT_FILES/addressing.txt $dir/OUTPUT_FILES
-
-    cp $specfem_dir/bin/xspecfem3D $dir/bin/
-    #cp $specfem_dir/bin/xmeshfem3D $dir/bin/
-
-    ###
-    ### cd to $dir and check
-    ###
+    # cd to $dir and check
     cd $dir
     if [ ! -f DATA/Par_file ] ; then
       echo WRONG! No Par_file
       exit
     fi
-
-    #if [ ! -f xparallel_forward_fullatt.sh ]; then
-    #  echo WRONG! No xparallel_forward_fullatt.sh
-    #  exit
-    #fi
-    #echo "Changing SBATCH file "
-    #jobname_tag="$line""$type"
-    #workdir_tag="$basedir/DATA/$jobname_tag"
-    #echo "dir:$workdir_tag"
-    #sed -i "s/^#SBATCH -J.*$/#SBATCH -J ${jobname_tag}/g" xparallel_forward_fullatt.sh
 
     if [ ! -f ./bin/xspecfem3D ] ; then
       echo WRONG! No xspecfem3D
@@ -117,15 +97,19 @@ done < $eventfile
 submission_status=1
 #########
 # generate the job submission script
+echo
 ./create_job_pbs.py
 
-n_jobs=`ls job_solver_bundle.pbs | wc -l`
+n_jobs=`ls job_solver_bundle.pbs.* | wc -l`
 
 if [ $n_jobs -gt 0 ]; then
+  echo
   echo "*******************"
   echo "Number of Jobs: $n_jobs"
   echo "*******************"
+  echo
 else
+  echo
   echo "*******************"
   echo "No Job Scripts"
   echo "*******************"

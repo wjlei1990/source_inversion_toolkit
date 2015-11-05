@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # ##########################
 # easy copy all necessary files of specfem3d_globe into
-# current directory
+# target directory
 import os
 import glob
 import shutil
@@ -33,7 +33,7 @@ def safe_copy_model_file(specfemdir, targetdir):
 
     for _file in model_files:
         print("Copy files:[%s --> %s]" % (_file, target_model_dir))
-        shutil.copy2(origin_file, target_model_dir)
+        shutil.copy2(_file, target_model_dir)
 
 
 if __name__ == "__main__":

@@ -10,15 +10,14 @@
 #PBS -l walltime=20:00:00
 #PBS -j oe
 #PBS -o copy_mesh.$PBS_JOBID.o
-#PBS -l nodes=1
 
 # #################
-meshcenter="../MODEL_GLOBAL"
+meshcenter="../specfem_stuff/DATABASES_MPI"
 
 workdir="../DATA"
 
 index_start=1
-index_end=10
+index_end=50
 
 #ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
 ext=( "" )
@@ -46,14 +45,13 @@ fi
 echo 
 echo "Copy Mesh Begin"
 echo "Index range: [$index_start, $index_end]"
-echo
 
 #copy the mesh file
 for (( event_index=$index_start; event_index<=$index_end; event_index++ ))
 do
   event_index_name=`printf "%03d" $event_index`
   ### loop over event
-  echo
+  echo "------------"
   echo "event_index: $event_index_name"
   echo "mesh center: $meshcenter"
   for type in "${ext[@]}"

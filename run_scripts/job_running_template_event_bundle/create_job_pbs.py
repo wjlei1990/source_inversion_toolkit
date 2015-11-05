@@ -68,11 +68,14 @@ if __name__ == "__main__":
     eventlist = read_txt_to_list(eventlist_file)
     nevents = len(eventlist)
     njobs = int(math.ceil( float(nevents) / nevents_per_job))
+
+    print "====== Create job scripts ======="
     print "Number of events:", nevents 
     print "Number of jobs:", njobs
 
     for ijob in range(njobs):
         # determine index
+        print "-----------"
         print "Jobid: %d" % ijob
         start_idx = ijob * nevents_per_job 
         end_idx = (ijob + 1) * nevents_per_job
