@@ -2,21 +2,13 @@
 import os
 import glob
 import shutil
-
-def check_exist(filename):
-    if not os.path.exists(filename):
-        raise ValueError("Path not exists: %s" % filename)
-
-
-def read_txt_into_list(filename):
-    with open(filename, "r") as f:
-        content = f.readlines()
-    return [x.rstrip("\n") for x in content]
+from utils import cleantree, copytree, copyfile, read_txt_into_list
+from utils import check_exist
 
 
 def copy_cmtfile(cmtfile, targetdir):
-    destdir = os.path.join(targetdir, "DATA/CMTSOLUTION")
-    shutil.copy2(cmtfile, destdir)
+    destfile = os.path.join(targetdir, "DATA/CMTSOLUTION")
+    copyfile(cmtfile, destfile)
         
 
 def copy_derivative_cmtfile(cmtfile_prefix, destdir):
@@ -27,34 +19,6 @@ def copy_derivative_cmtfile(cmtfile_prefix, destdir):
     for _ext in exts:
         cmtfile = cmtfile_prefix + _ext
         shutil.copy2(cmtfile, destdir)
-
-
-def cleantree(folder):
-    if not os.path.exists(folder):
-        return
-    for the_file in os.listdir(folder):
-        file_path = os.path.join(folder, the_file)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-            #elif os.path.isdir(file_path): 
-                #shutil.rmtree(file_path)
-        except Exception, e:
-            print e
-
-
-def copytree(src, dst, symlinks=False, ignore=None):
-    if not os.path.exists(src):
-        raise ValueError("Src dir not exists: %s" % src)
-    if not os.path.exists(dst):
-        raise ValueError("Dest dir not exists: %s" % dst)
-    for item in os.listdir(src):
-        s = os.path.join(src, item)
-        d = os.path.join(dst, item)
-        if os.path.isdir(s):
-            shutil.copytree(s, d, symlinks, ignore)
-        else:
-            shutil.copy2(s, d)
 
 
 def copy_specfem_stuff(specfemdir, targetdir):
@@ -75,8 +39,7 @@ def check_mesh(targetdir):
         raise ValueError("No enough mesh files. Double check:%s" % targetdir)
 
 
-if __name__ == "__main__":
-
+def copy_files():
     scratch_dir="../.."
     eventfile="XEVENTID"
     cmtcenter="/ccs/home/lei/SOURCE_INVERSION/CMT_BIN/ALL_CMT"
@@ -108,3 +71,6 @@ if __name__ == "__main__":
         
         check_mesh(targetdir)
 
+
+if __name__ == "__main__":
+    copy_files()

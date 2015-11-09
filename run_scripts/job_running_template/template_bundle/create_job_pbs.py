@@ -40,10 +40,14 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx):
     content = fi.readlines()
 
     for line in content:
-        line = re.sub(r"^#PBS -l nodes=.*", "#PBS -l nodes=%d" % nnodes_per_job, line)
-        line = re.sub(r"^#PBS -l walltime=.*", "#PBS -l walltime=%s" % walltime, line)
-        line = re.sub(r"^eventfile=.*", "eventfile=\"%s\"" % eventfile, line)
-        line = re.sub(r"^event_index=.*", "event_index=%d" % (start_idx+1), line)
+        line = re.sub(r"^#PBS -l nodes=.*", "#PBS -l nodes=%d" % 
+                      nnodes_per_job, line)
+        line = re.sub(r"^#PBS -l walltime=.*", "#PBS -l walltime=%s" % 
+                      walltime, line)
+        line = re.sub(r"^eventfile=.*", "eventfile=\"%s\"" % 
+                      eventfile, line)
+        line = re.sub(r"^event_index=.*", "event_index=%d" % 
+                      (start_idx+1), line)
 
         # turn of waiting mode
         line = re.sub(r"./bin/xspecfem3D &", "./bin/xspecfem3D", line)
@@ -52,8 +56,7 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx):
         fo.write(line) 
 
 
-if __name__ == "__main__":
-
+def create_job_pbs():
     sub_eventfile_prefix = "XEVENTID_"
     sub_sbatch_prefix = "job_solver_bundle.pbs."
 
@@ -93,3 +96,6 @@ if __name__ == "__main__":
         print "jobs batch file: %s" % outputfn
         modify_job_sbatch_file(job_template, outputfn, eventfile, start_idx)
 
+
+if __name__ == "__main__":
+    create_job_pbs()

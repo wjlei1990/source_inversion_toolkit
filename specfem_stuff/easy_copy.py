@@ -36,9 +36,32 @@ def safe_copy_model_file(specfemdir, targetdir):
         shutil.copy2(_file, target_model_dir)
 
 
+def quick_check(specfemdir, filelist):
+    for _file in filelist:
+        path = os.path.join(specfemdir, _file)
+        if not os.path.exists(path):
+            raise ValueError("File not exists: %s" % (path))
+
+    # check model file
+    path = os.path.join(specfemdir, "DATABASES_MPI")
+    bpfiles = glob.glob(os.path.join(path, "*.bp"))
+    binfiles = glob.glob(os.path.join(path, "*.bin"))
+    if len(bpfiles) == 4:
+        if len(binfiles) != 1:
+            raise ValueError("Check model files: %s" % path)
+    elif len(bpfiles) == 0:
+        if len(binfiles) <= 2:
+            raise ValueError("Check model files: %s" % path)
+    else:
+        raise ValueError("Check model files: %s" % path)
+
+
 if __name__ == "__main__":
 
-    specfemdir="/lustre/atlas/proj-shared/geo111/Wenjie/bm_specfem/specfem3d_globe"
+    print("******************************************")
+    print("Please specify the directory of specfem")
+    specfemdir=raw_input("specfemdir=")
+
     targetdir="."
 
     if not os.path.exists(specfemdir):
@@ -48,6 +71,10 @@ if __name__ == "__main__":
               "OUTPUT_FILES/values_from_mesher.h", "DATA/STATIONS",
               "DATA/Par_file"]
 
+    quick_check(specfemdir, filelist)
+
+    print("--------------------------")
+    print("Copy from dir: %s" % specfemdir)
     for fn in filelist:
         safe_copy(fn, specfemdir, targetdir)
 

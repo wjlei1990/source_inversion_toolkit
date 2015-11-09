@@ -1,5 +1,10 @@
 # Directory where you put specfem related stuff
+# Please get your specfem compiled first and run the mesher to generate the mesh files.
 
+# Note:
+  1) use easy_copy.py to copy all related stuff into current directory.
+
+# File required
 1) bin:
   includes bin/xspecfem3D
 
@@ -11,8 +16,3 @@
 
 4) OUTPUT_FILES:
   values_from_mesher.h and addressing.txt
-
-# Note:
-  1) use easy_copy.py to copy all related stuff into current directory.
-
-

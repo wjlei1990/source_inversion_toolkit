@@ -66,3 +66,4 @@ DATA/event_*
 *.swp
 xspecfem3D
 *.o
+_event_split_list_

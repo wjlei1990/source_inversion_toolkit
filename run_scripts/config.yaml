@@ -1,0 +1,20 @@
+# CMT folder: directory where you store cmt files
+cmtfolder: "/path/to/cmt/center"
+
+# Size of your database. If you set the number to 10, then
+# it means 10 copies of specfem will be copied. The runbase_size 
+# depends on how large disk size is since the model file is large
+runbase_size: 50
+
+# The large eventfile you want to split
+total_eventfile: "example_files/EVENTID_LIST"
+
+# job sub-folder tag
+job_tag: "test_benchmark"
+
+# job running mode: "bundle" or "single"
+# "bundle": bundle all forward simulation for one source in
+#   one folder(preferred);
+# "single": keep every single forward simulation in different
+#   folder.
+running_mode: "bundle"

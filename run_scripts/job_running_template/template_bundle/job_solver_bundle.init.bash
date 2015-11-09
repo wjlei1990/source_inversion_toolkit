@@ -69,12 +69,12 @@ do
 
     # stores setup
     cp DATA/Par_file OUTPUT_FILES/
-    mv DATA/CMTSOLUTION OUTPUT_FILES/
+    cp DATA/CMTSOLUTION OUTPUT_FILES/
     cp DATA/STATIONS OUTPUT_FILES/
 
     # job running
     # echo "running solver"
-    #aprun -n $numproc -N1 ./bin/xspecfem3D &
+    aprun -n $numproc -N1 ./bin/xspecfem3D &
 
     # mv OUTPUT_FILES out
     archivedir=$currentdir"/data/$event$type"
