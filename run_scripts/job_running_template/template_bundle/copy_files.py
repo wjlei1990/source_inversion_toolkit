@@ -18,7 +18,8 @@ def copy_derivative_cmtfile(cmtfile_prefix, destdir):
           "_dep", "_lat", "_lon")
     for _ext in exts:
         cmtfile = cmtfile_prefix + _ext
-        shutil.copy2(cmtfile, destdir)
+        destcmt = os.path.join(destdir, os.path.basename(cmtfile))
+        copyfile(cmtfile, destcmt)
 
 
 def copy_specfem_stuff(specfemdir, targetdir):
@@ -35,7 +36,7 @@ def check_mesh(targetdir):
     meshdir = os.path.join(targetdir, "DATABASES_MPI")
     
     meshfiles = glob.glob(os.path.join(meshdir, "*"))
-    if len(meshfiles) <= 5:
+    if len(meshfiles) < 5:
         raise ValueError("No enough mesh files. Double check:%s" % targetdir)
 
 
@@ -70,7 +71,7 @@ def copy_files():
         copy_cmtfile(cmtfile, targetdir)
         #copy_derivative_cmtfile(cmtfile, "cmtfile")
         
-        #check_mesh(targetdir)
+        check_mesh(targetdir)
 
 
 if __name__ == "__main__":

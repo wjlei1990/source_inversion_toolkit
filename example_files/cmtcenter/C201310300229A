@@ -1,0 +1,13 @@
+ PDE 2013 10 30  2 29 12.00 -35.4400  -73.1900  39.2 0.0 5.8 OFF COAST OF CENTRAL CHILE
+event name:     C201310300229A
+time shift:      7.8000
+half duration:   2.2000
+latitude:      -35.4600
+longitude:     -73.3600
+depth:          12.7000
+Mrr:       4.720000e+24
+Mtt:       2.600000e+23
+Mpp:      -4.980000e+24
+Mrt:      -1.770000e+24
+Mrp:      -6.960000e+24
+Mtp:      -1.480000e+24

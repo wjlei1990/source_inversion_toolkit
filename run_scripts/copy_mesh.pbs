@@ -14,7 +14,7 @@
 # #################
 meshcenter="../specfem_stuff/DATABASES_MPI"
 
-workdir="../DATA"
+workdir="../RUN_BASE"
 
 index_start=1
 index_end=50

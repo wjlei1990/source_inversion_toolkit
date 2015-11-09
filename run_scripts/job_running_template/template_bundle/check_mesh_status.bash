@@ -5,7 +5,7 @@
 
 #################################
 #workdir=$PROJWORK/geo018/Wenjie/SOURCE_INVERSION/DATA
-workdir="../../DATA"
+workdir="../../RUN_BASE"
 
 #ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
 ext=( "" )

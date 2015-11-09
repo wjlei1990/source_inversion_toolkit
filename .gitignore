@@ -67,3 +67,5 @@ RUN_BASE/event_*
 xspecfem3D
 *.o
 _event_split_list_
+specfem_stuff/DATA
+specfem_stuff/OUTPUT_FILES
