@@ -14,6 +14,7 @@ import sys
 import shutil
 import yaml
 from utils import copytree, cleantree, copyfile
+from utils import read_txt_into_list
 
 
 def split_eventlist(inputfile, njobs_bundle, outputdir, output_base):
@@ -68,7 +69,7 @@ def check_job_folder_exist(targetdir_list):
                 if not os.path.exists(_dir):
                     os.makedirs(_dir)
                 else:
-                    cleantree(targetdir)
+                    cleantree(_dir)
         elif anser == "n":
             raise ValueError("Quit as requested") 
         else:
@@ -88,6 +89,7 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder):
 
     for _i, targetdir in enumerate(targetdir_list):
         idx = _i + 1
+        print("="*5 + "\nJob id: %d" % idx)
         # copy eventlist file
         eventlist_file = eventlist_dict[idx]
         targetfile = os.path.join(targetdir, "XEVENTID")
@@ -95,11 +97,12 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder):
 
         # copy original cmt file 
         targetcmtdir = os.path.join(targetdir, "cmtfile")
+        print("copy cmt:[%s --> %s]" % (cmtfolder, targetcmtdir))
         events = read_txt_into_list(eventlist_file)
         for _event in events:
             origincmt = os.path.join(cmtfolder, _event)
             targetcmt = os.path.join(targetcmtdir, _event)
-            copyfile(origincmt, targetcmt)
+            copyfile(origincmt, targetcmt, verbose=False)
 
         print("Copy dir:[%s --> %s]" % (template_folder, targetdir))
         # copy scripts template
@@ -123,6 +126,7 @@ if __name__ == "__main__":
     # create job folder
     tag = config["job_tag"]
     running_mode = config["running_mode"]
+    cmtfolder = config["cmtfolder"]
     if running_mode == "bundle":
         template_folder = "./job_running_template/template_bundle"
     elif running_mode == "single":

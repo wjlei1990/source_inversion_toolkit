@@ -40,11 +40,12 @@ def check_mesh(targetdir):
 
 
 def copy_files():
-    scratch_dir="../.."
+
+    cmtcenter="cmtfile"
     eventfile="XEVENTID"
-    cmtcenter="/ccs/home/lei/SOURCE_INVERSION/CMT_BIN/ALL_CMT"
+    scratch_dir="../.."
     specfemdir = os.path.join(scratch_dir, "specfem_stuff")
-    datacenter = os.path.join(scratch_dir, "DATA")
+    datacenter = os.path.join(scratch_dir, "RUN_BASE")
 
     check_exist(eventfile)
     check_exist(cmtcenter)
@@ -67,9 +68,9 @@ def copy_files():
 
         copy_specfem_stuff(specfemdir, targetdir)
         copy_cmtfile(cmtfile, targetdir)
-        copy_derivative_cmtfile(cmtfile, "cmtfile")
+        #copy_derivative_cmtfile(cmtfile, "cmtfile")
         
-        check_mesh(targetdir)
+        #check_mesh(targetdir)
 
 
 if __name__ == "__main__":

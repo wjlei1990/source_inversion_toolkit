@@ -12,19 +12,8 @@ import os
 import glob
 import math
 import re
-
-# User parameter
-nevents_per_job = 1
-nnodes_per_job = 384
-walltime = "%d:00:00" % int(2*nevents_per_job)
-eventlist_file = "./XEVENTID"
-job_template = "job_solver_bundle.init.bash"
-
-
-def read_txt_to_list(filename):
-    with open(filename, 'r') as f:
-        content = f.readlines()
-        return [ line.rstrip('\n') for line in content ] 
+from utils import read_txt_into_list
+import yaml
 
 
 def write_list_to_txt(vlist, filename):
@@ -33,7 +22,8 @@ def write_list_to_txt(vlist, filename):
             f.write("%s\n" % value)
 
 
-def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx):
+def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx,
+                           nnodes, walltime):
     fi = open(inputfile, "r")
     fo = open(outputfile, "w")
 
@@ -41,7 +31,7 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx):
 
     for line in content:
         line = re.sub(r"^#PBS -l nodes=.*", "#PBS -l nodes=%d" % 
-                      nnodes_per_job, line)
+                      nnodes, line)
         line = re.sub(r"^#PBS -l walltime=.*", "#PBS -l walltime=%s" % 
                       walltime, line)
         line = re.sub(r"^eventfile=.*", "eventfile=\"%s\"" % 
@@ -56,7 +46,14 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx):
         fo.write(line) 
 
 
-def create_job_pbs():
+def create_job_pbs(nevents_per_job, nnodes_per_simulation, 
+                   walltime_per_simulation):
+    # User parameter
+    walltime = "%d:00:00" % int(walltime_per_simulation*nevents_per_job)
+
+    eventlist_file = "./XEVENTID"
+    job_template = "job_solver_bundle.init.bash"
+
     sub_eventfile_prefix = "XEVENTID_"
     sub_sbatch_prefix = "job_solver_bundle.pbs."
 
@@ -68,7 +65,7 @@ def create_job_pbs():
     for fn in filelist:
         os.remove(fn)
 
-    eventlist = read_txt_to_list(eventlist_file)
+    eventlist = read_txt_into_list(eventlist_file)
     nevents = len(eventlist)
     njobs = int(math.ceil( float(nevents) / nevents_per_job))
 
@@ -79,12 +76,12 @@ def create_job_pbs():
     for ijob in range(njobs):
         # determine index
         print "-----------"
-        print "Jobid: %d" % ijob
+        print "Jobid: %d" % (ijob + 1)
         start_idx = ijob * nevents_per_job 
         end_idx = (ijob + 1) * nevents_per_job
         if ijob == njobs-1:
             end_idx = nevents
-        print "start and end idx: [%d, %d]" % (start_idx, end_idx)
+        print "start and end idx: [%d, %d)" % (start_idx, end_idx)
 
         # create sub-eventlist file
         eventfile = "%s%d" %(sub_eventfile_prefix, ijob+1)
@@ -94,8 +91,15 @@ def create_job_pbs():
         # create job pbs script
         outputfn = "%s%d" %(sub_sbatch_prefix, ijob+1)
         print "jobs batch file: %s" % outputfn
-        modify_job_sbatch_file(job_template, outputfn, eventfile, start_idx)
+        modify_job_sbatch_file(job_template, outputfn, eventfile, start_idx,
+                               nnodes_per_simulation, walltime)
 
 
 if __name__ == "__main__":
-    create_job_pbs()
+    with open("../config.yaml") as fh:
+        config = yaml.load(fh)
+    nevents_per_job = config["nevents_per_job"]
+    nnodes_per_simulation = config["nnodes_per_simulation"]
+    walltime_per_simulation = config["walltime_per_simulation"]
+    create_job_pbs(nevents_per_job, nnodes_per_simulation, 
+                   walltime_per_simulation)

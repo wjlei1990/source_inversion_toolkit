@@ -1,5 +1,4 @@
-#!/usr/bin/env
-
+#!/usr/bin/env python
 # ################################################################
 # Prepare files and set up directories for the source inversion
 # except mesh files: for mesh file, use copy_mesh.pbs file
@@ -8,6 +7,7 @@
 # ################################################################
 
 import yaml
+import os
 
 def safe_makedir(dirname):
     if not os.path.exists(dirname):
@@ -22,9 +22,10 @@ if __name__ == "__main__":
     scratch_dir=".."
     runbase=os.path.join(scratch_dir, "RUN_BASE")
 
-    for _idx in range(run):
-        print("Seting up index: %d" % _idx)
-        dirname = os.path.join(runbase, "event_%03d" % _idx)
+    for _idx in range(runbase_size):
+        idx = _idx + 1 
+        print("Seting up index: %d" % idx)
+        dirname = os.path.join(runbase, "event_%03d" % idx)
         print("Dir path: %s" % dirname)
         safe_makedir(os.path.join(dirname, "DATA"))
         safe_makedir(os.path.join(dirname, "bin"))

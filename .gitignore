@@ -61,7 +61,7 @@ job_split_list
 job_test_benchmark*
 *.bp
 *.bin
-DATA/event_*
+RUN_BASE/event_*
 *.OU
 *.swp
 xspecfem3D

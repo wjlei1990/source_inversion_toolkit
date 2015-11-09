@@ -1,5 +1,5 @@
 # CMT folder: directory where you store cmt files
-cmtfolder: "/path/to/cmt/center"
+cmtfolder: "example_files/cmtfile"
 
 # Size of your database. If you set the number to 10, then
 # it means 10 copies of specfem will be copied. The runbase_size 
@@ -18,3 +18,9 @@ job_tag: "test_benchmark"
 # "single": keep every single forward simulation in different
 #   folder.
 running_mode: "bundle"
+# number of events in one pbs job
+nevents_per_job: 3
+# number of nodes used for on job
+nnodes_per_simulation: 384
+# walltime for one forward simulation
+walltime_per_simulation: 2
