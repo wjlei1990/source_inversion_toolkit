@@ -1,5 +1,5 @@
 # CMT folder: directory where you store cmt files
-cmtfolder: "../example_files/cmtcenter"
+cmtfolder: "/ccs/home/lei/log_event/ebru/cmt"
 
 # Size of your database. If you set the number to 10, then
 # it means 10 copies of specfem will be copied. The runbase_size 
@@ -7,10 +7,10 @@ cmtfolder: "../example_files/cmtcenter"
 runbase_size: 50
 
 # The large eventfile you want to split
-total_eventfile: "../example_files/EVENTID_LIST"
+total_eventfile: "/ccs/home/lei/log_event/ebru/XEVENTID_ebru_all"
 
 # job sub-folder tag
-job_tag: "test_benchmark"
+job_tag: "ebru_extra_test"
 
 # job running mode: "bundle" or "single"
 # "bundle": bundle all forward simulation for one source in

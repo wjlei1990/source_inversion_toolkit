@@ -9,14 +9,14 @@
 ## Job Allocation 
 ## titan: gpu compute nodes have 1 GPU card (K20x) and 16-core (interlagos) CPU
 
-#PBS -l walltime=1:00:00
+#PBS -l walltime=2:00:00
 #PBS -l nodes=384
 
 # -----------------------------------------------------
 ## User Parameter
 
 eventfile="XEVENTID"
-basedir="../.."
+runbase="../../RUN_BASE"
 ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
 
 event_index=1
@@ -48,7 +48,7 @@ do
   echo "event:$event  event_index: $event_index_name"
   for type in "${ext[@]}"
   do
-    workingdir="$basedir/DATA/event_$event_index_name"
+    workingdir="$runbase/event_$event_index_name"
     echo "============"
     echo "type: $type"
     echo "working dir: $workingdir"
@@ -67,11 +67,6 @@ do
     NCHUNKS=`grep NCHUNKS DATA/Par_file | cut -d = -f 2 `
     numproc=$(( $NCHUNKS * $NPROC_XI * $NPROC_ETA ))
 
-    # stores setup
-    cp DATA/Par_file OUTPUT_FILES/
-    cp DATA/CMTSOLUTION OUTPUT_FILES/
-    cp DATA/STATIONS OUTPUT_FILES/
-
     # job running
     # echo "running solver"
     aprun -n $numproc -N1 ./bin/xspecfem3D &
@@ -81,18 +76,25 @@ do
     echo "data stored at: $archivedir"
     mkdir -p $archivedir
     rm $archivedir/*
+
+    # stores setup
+    mv DATA/CMTSOLUTION OUTPUT_FILES/
+    cp DATA/Par_file OUTPUT_FILES/
+    cp DATA/STATIONS OUTPUT_FILES/
+
     mv OUTPUT_FILES/*.sac $archivedir
     mv OUTPUT_FILES/*.h5 $archivedir
     cp OUTPUT_FILES/* $archivedir
-    cd $currentdir
-
+  
     count=$(( $count + 1 ))
     echo "job done at: `date`"
+
+    cd $currentdir
   done
   event_index=$(( $event_index + 1 ))
 done
 
-wait
+#wait
 
 total_jobs=$(( $nevents*$ntype ))
 
