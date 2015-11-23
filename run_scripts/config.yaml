@@ -24,3 +24,18 @@ nevents_per_job: 1
 nnodes_per_simulation: 384
 # walltime for one forward simulation
 walltime_per_simulation: 2
+
+# Generate derivative CMTSOLUTION file
+# If false, then you need to generate the derivative CMT
+# externally(put them the same directory same as "cmtfolder")
+# and then they will be copied in the job directory;
+# If true, the derivative CMT will be generated internally.
+generate_deriv_cmt: false 
+# Derive CMT list
+deriv_cmt_list: ["Mrr", "Mtt", "Mpp", "Mrt", "Mrp", "Mtp", "dep", "lon", "lat"]
+# CMT perturbation
+# Not used if "generate_deriv_cmt" is false
+dmoment_tensor: 2.0e+23  # dyne * cm
+ddepth: 3.0        # km
+dlatitude: 0.03    # degree
+dlongitude: 0.03   # degree

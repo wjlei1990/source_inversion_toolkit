@@ -76,7 +76,22 @@ def check_job_folder_exist(targetdir_list):
             raise ValueError("Incorrect input")
  
 
-def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder):
+def copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
+                  deriv_cmt_list):
+    origincmt = os.path.join(cmtfolder, _event)
+    targetcmt = os.path.join(targetcmtdir, _event)
+    copyfile(origincmt, targetcmt, verbose=False)
+    if not generate_deriv_cmt:
+        # copy deriv cmt
+        for deriv_type in deriv_cmt_list:
+            derivcmt = os.path.join(cmtfolder, "%s_%s" % (_event, deriv_type)) 
+            targetcmt = os.path.join(targetcmtdir, "%s_%s" 
+                                     % (_event, deriv_type))
+            copyfile(derivcmt, targetcmt, verbose=False)
+
+
+def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
+                      generate_deriv_cmt, deriv_cmt_list):
 
     targetdir_list = []
     print("*"*20 + "\nCreat job sub folder")
@@ -100,9 +115,8 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder):
         print("copy cmt:[%s --> %s]" % (cmtfolder, targetcmtdir))
         events = read_txt_into_list(eventlist_file)
         for _event in events:
-            origincmt = os.path.join(cmtfolder, _event)
-            targetcmt = os.path.join(targetcmtdir, _event)
-            copyfile(origincmt, targetcmt, verbose=False)
+            copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
+                          deriv_cmt_list)
 
         print("Copy dir:[%s --> %s]" % (template_folder, targetdir))
         # copy scripts template
@@ -127,9 +141,12 @@ if __name__ == "__main__":
     tag = config["job_tag"]
     running_mode = config["running_mode"]
     cmtfolder = config["cmtfolder"]
+    generate_deriv_cmt = config["generate_deriv_cmt"]
+    deriv_cmt_list = config["deriv_cmt_list"]
     if running_mode == "bundle":
         template_folder = "./job_running_template/template_bundle"
     elif running_mode == "single":
         template_folder = "./job_running_template/template_single"
 
-    create_job_folder(template_folder, tag, eventlist_dict, cmtfolder)
+    create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
+                      generate_deriv_cmt, deriv_cmt_list)

@@ -8,7 +8,7 @@ import yaml
 
 
 def perturb_cmt():
-    pass
+    raise NotImplementedError("Not implemented")
 
 
 def prepare_dir():
@@ -18,7 +18,9 @@ def prepare_dir():
     copy_files()
 
     # perturb cmt files
-    perturb_cmt()
+    generate_deriv_cmt = config["generate_deriv_cmt"]
+    if genertae_deriv_cmt:
+        perturb_cmt()
 
     # create job pbs files
     nevents_per_job = config["nevents_per_job"]                                 
