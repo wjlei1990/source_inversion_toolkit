@@ -68,7 +68,7 @@ def copy_files():
         print("targetdir: %s" % targetdir)
 
         copy_specfem_stuff(specfemdir, targetdir)
-        copy_cmtfile(cmtfile, targetdir)
+        #copy_cmtfile(cmtfile, targetdir)
         #copy_derivative_cmtfile(cmtfile, "cmtfile")
         
         check_mesh(targetdir)

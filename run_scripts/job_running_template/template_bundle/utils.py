@@ -54,3 +54,12 @@ def copyfile(origin_file, target_file, verbose=True):
         print("Copy file:[%s --> %s]" % (origin_file, target_file))            
     shutil.copy2(origin_file, target_file)                                      
                                                   
+
+def get_permission():
+    answer = raw_input("[Y/n]:")
+    if answer == "Y":
+        return True
+    elif answer == "n":
+        return False
+    else:
+        raise ValueError("answer incorrect: %s" % answer)

@@ -2,11 +2,13 @@
 import glob
 import os
 from utils import cleantree
+import sys
 
 from copy_files import copy_files
 from create_job_pbs import create_job_pbs
 import yaml
 from perturb_cmt import gen_cmt_wrapper
+from utils import get_permission
 
 
 def perturb_cmt(cmtdir, dmoment_tensor, dlatitude, dlongitude, ddepth):
@@ -53,7 +55,16 @@ def prepare_dir():
         raise ValueError("No job scripts")
 
     # clean up temp data archive
-    cleantree("data")
+    if not os.path.exists("data"):
+        os.makedirs("data")
+    if len(glob.glob("data/*")) > 0:
+        print("Data exists: ", glob.glob("data/*"))
+        print("Data will be removed; Make sure there is nothing left")
+        answer = get_permission()
+        if answer:
+            cleantree("data")
+        else:
+            sys.exit(0)
 
     print("*"*30)
     print("Please check related files and then submit jobs")
