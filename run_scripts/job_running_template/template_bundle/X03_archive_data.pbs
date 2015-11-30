@@ -55,7 +55,7 @@ echo "======================"
 echo "tarfile: $tarfile"
 echo "Current dir:`pwd`"
 echo "htar -cf $tarfile $workdir"
-#htar -cf $tarfile $workdir
+htar -cf $tarfile $workdir
 
 echo "Archive Done"
 

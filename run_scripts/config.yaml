@@ -10,7 +10,7 @@ runbase_size: 50
 total_eventfile: "/ccs/home/lei/log_event/ebru/XEVENTID_ebru_all"
 
 # job sub-folder tag
-job_tag: "ebru_extra_test"
+job_tag: "extra_test"
 
 # job running mode: "bundle" or "single"
 # "bundle": bundle all forward simulation for one source in
@@ -20,8 +20,6 @@ job_tag: "ebru_extra_test"
 running_mode: "bundle"
 # number of events in one pbs job
 nevents_per_job: 1
-# number of nodes used for on job
-nnodes_per_simulation: 384
 # walltime for one forward simulation
 walltime_per_simulation: 2
 
@@ -30,12 +28,13 @@ walltime_per_simulation: 2
 # externally(put them the same directory same as "cmtfolder")
 # and then they will be copied in the job directory;
 # If true, the derivative CMT will be generated internally.
-generate_deriv_cmt: false 
+generate_deriv_cmt: true 
 # Derive CMT list
-deriv_cmt_list: ["Mrr", "Mtt", "Mpp", "Mrt", "Mrp", "Mtp", "dep", "lon", "lat"]
+# For example: ["Mrr", "Mtt", "Mpp", "Mrt", "Mrp", "Mtp", "dep", "lon", "lat"]
+deriv_cmt_list: ["Mrr", "Mtt", "Mpp", "Mrt", "Mrp", "Mtp", ]
 # CMT perturbation
 # Not used if "generate_deriv_cmt" is false
-dmoment_tensor: 2.0e+23  # dyne * cm
-ddepth: 3.0        # km
-dlatitude: 0.03    # degree
-dlongitude: 0.03   # degree
+dmoment_tensor: 2.0e+24  # dyne * cm
+ddepth: 5.0        # km
+dlatitude: 0.05   # degree
+dlongitude: 0.05   # degree

@@ -82,12 +82,16 @@ def copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
     targetcmt = os.path.join(targetcmtdir, _event)
     copyfile(origincmt, targetcmt, verbose=False)
     if not generate_deriv_cmt:
-        # copy deriv cmt
+        # copy deriv cmt files
         for deriv_type in deriv_cmt_list:
             derivcmt = os.path.join(cmtfolder, "%s_%s" % (_event, deriv_type)) 
             targetcmt = os.path.join(targetcmtdir, "%s_%s" 
                                      % (_event, deriv_type))
             copyfile(derivcmt, targetcmt, verbose=False)
+    else:
+        # copy scripts to generate deriv cmt files
+        copytree("job_running_template/perturb_cmt", 
+                 os.path.dirname(targetcmtdir))
 
 
 def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
@@ -122,6 +126,9 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
         # copy scripts template
         copytree(template_folder, targetdir)
 
+        # copy config.yaml file
+        copyfile("config.yaml", os.path.join(targetdir, "config.yaml"))
+
 
 if __name__ == "__main__":
     config_file = "config.yaml"
@@ -150,3 +157,4 @@ if __name__ == "__main__":
 
     create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
                       generate_deriv_cmt, deriv_cmt_list)
+

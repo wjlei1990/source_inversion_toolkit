@@ -11,5 +11,5 @@ do
   echo $i
   file=$fn_base".$i"
   echo "$file"
-  qsub $file
+  qsub -q titan $file
 done

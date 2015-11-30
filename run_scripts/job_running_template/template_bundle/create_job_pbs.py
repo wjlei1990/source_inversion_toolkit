@@ -23,11 +23,22 @@ def write_list_to_txt(vlist, filename):
 
 
 def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx,
-                           nnodes, walltime):
+                           nnodes, walltime, deriv_cmt_list):
     fi = open(inputfile, "r")
     fo = open(outputfile, "w")
 
     content = fi.readlines()
+
+    full_ext_list = ["Mrr", "Mtt", "Mpp", "Mrt", "Mrp", "Mtp", 
+                     "dep", "lon", "lat"]
+
+    ext_list = "ext=( \"\" "
+    for _ext in deriv_cmt_list:
+        if _ext not in full_ext_list:
+            raise ValueError("ext incorrect: %s" % _ext)
+        ext_list += "\"_%s\" " % _ext
+    ext_list += ")"
+    print "ext_list:", ext_list
 
     for line in content:
         line = re.sub(r"^#PBS -l nodes=.*", "#PBS -l nodes=%d" % 
@@ -38,6 +49,7 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx,
                       eventfile, line)
         line = re.sub(r"^event_index=.*", "event_index=%d" % 
                       (start_idx+1), line)
+        line = re.sub(r"^ext=.*", ext_list, line)
 
         # turn of waiting mode
         line = re.sub(r"./bin/xspecfem3D &", "./bin/xspecfem3D", line)
@@ -46,8 +58,9 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx,
         fo.write(line) 
 
 
-def create_job_pbs(nevents_per_job, nnodes_per_simulation, 
-                   walltime_per_simulation):
+def create_job_pbs(nevents_per_job, walltime_per_simulation, deriv_cmt_list):
+    
+    nnodes_per_simulation = extract_number_of_nodes()
     # User parameter
     walltime = "%d:00:00" % int(walltime_per_simulation*nevents_per_job)
 
@@ -92,14 +105,26 @@ def create_job_pbs(nevents_per_job, nnodes_per_simulation,
         outputfn = "%s%d" %(sub_sbatch_prefix, ijob+1)
         print "jobs batch file: %s" % outputfn
         modify_job_sbatch_file(job_template, outputfn, eventfile, start_idx,
-                               nnodes_per_simulation, walltime)
+                               nnodes_per_simulation, walltime, deriv_cmt_list)
 
+
+def extract_number_of_nodes():
+    specfem_parfile = "../../specfem_stuff/DATA/Par_file"
+    with open(specfem_parfile) as fh:
+        content = fh.readlines()
+    for line in content:
+        if re.search(r'^NPROC_XI', line):
+            nproc_xi = int(line.split()[-1])
+        if re.search(r'^NPROC_ETA', line):
+            nproc_eta = int(line.split()[-1])
+        if re.search(r'^NCHUNKS', line):
+            nchunks = int(line.split()[-1])
+    nproc = nproc_xi * nproc_eta * nchunks
+    return nproc
 
 if __name__ == "__main__":
-    with open("../config.yaml") as fh:
+    with open("./config.yaml") as fh:
         config = yaml.load(fh)
     nevents_per_job = config["nevents_per_job"]
-    nnodes_per_simulation = config["nnodes_per_simulation"]
     walltime_per_simulation = config["walltime_per_simulation"]
-    create_job_pbs(nevents_per_job, nnodes_per_simulation, 
-                   walltime_per_simulation)
+    create_job_pbs(nevents_per_job, walltime_per_simulation)
