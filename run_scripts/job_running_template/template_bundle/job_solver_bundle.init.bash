@@ -57,6 +57,10 @@ do
     cmtfile="cmtfile/$event$type"
     cp $cmtfile $workingdir/DATA/CMTSOLUTION
 
+    # copy station file
+    stafile="station/"$event".STATIONS"
+    cp $stafile $workingdir/DATA/STATIONS
+
     cd $workingdir
     echo "Actual working dir: `pwd`"
     echo "Executable: `ls ./bin/xspecfem3D`"

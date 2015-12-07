@@ -107,7 +107,7 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
     print("*"*20 + "\nCreat job sub folder")
     for _i in range(len(eventlist_dict)):
         idx = _i + 1
-        targetdir = "job_" + tag + "_%d" % idx
+        targetdir = "job_" + tag + "_%02d" % idx
         targetdir_list.append(targetdir)
 
     check_job_folder_exist(targetdir_list)
