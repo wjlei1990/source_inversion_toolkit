@@ -68,8 +68,9 @@ do
     numproc=$(( $NCHUNKS * $NPROC_XI * $NPROC_ETA ))
 
     # job running
-    # echo "running solver"
+    echo "solver start: `date`"
     aprun -n $numproc -N1 ./bin/xspecfem3D &
+    echo "solver end: `date`"
 
     # mv OUTPUT_FILES out
     archivedir=$currentdir"/data/$event$type"

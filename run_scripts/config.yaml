@@ -1,5 +1,11 @@
 # CMT folder: directory where you store cmt files
-cmtfolder: "/ccs/home/lei/log_event/ebru/cmt"
+cmtfolder: "/ccs/home/lei/SOURCE_INVERSION/CMT_BIN/ALL_CMT"
+
+# station folder
+# setting different station files for different simulations(sources)
+# station file should be named as: eventname.STATIONS
+# for example: C200501121652A.STATIONS
+stationfolder: "/lustre/atlas/proj-shared/geo111/rawdata/stations"
 
 # Size of your database. If you set the number to 10, then
 # it means 10 copies of specfem will be copied. The runbase_size 
@@ -7,10 +13,10 @@ cmtfolder: "/ccs/home/lei/log_event/ebru/cmt"
 runbase_size: 50
 
 # The large eventfile you want to split
-total_eventfile: "/ccs/home/lei/log_event/ebru/XEVENTID_ebru_all"
+total_eventfile: "/ccs/home/lei/log_event/new_events/shallow.log.cmtlist"
 
 # job sub-folder tag
-job_tag: "ebru_m15_test"
+job_tag: "si_shallow"
 
 # job running mode: "bundle" or "single"
 # "bundle": bundle all forward simulation for one source in

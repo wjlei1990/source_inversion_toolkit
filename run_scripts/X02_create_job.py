@@ -94,8 +94,14 @@ def copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
                  os.path.dirname(targetcmtdir))
 
 
+def copy_stations(_event, stationfolder, targetstadir):
+    originsta = os.path.join(stationfolder, "%s.STATIONS" % _event)
+    targetsta = os.path.join(targetstadir, "%s.STATIONS" % _event)
+    copyfile(originsta, targetsta, verbose=False)
+
+
 def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
-                      generate_deriv_cmt, deriv_cmt_list):
+                      stafolder, generate_deriv_cmt, deriv_cmt_list):
 
     targetdir_list = []
     print("*"*20 + "\nCreat job sub folder")
@@ -114,13 +120,17 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
         targetfile = os.path.join(targetdir, "XEVENTID")
         copyfile(eventlist_file, targetfile)
 
-        # copy original cmt file 
+        # copy original cmt file and station file
         targetcmtdir = os.path.join(targetdir, "cmtfile")
+        targetstadir = os.path.join(targetdir, "station")
         print("copy cmt:[%s --> %s]" % (cmtfolder, targetcmtdir))
+        print("copy stattion:[%s --> %s]" % (stafolder, targetstadir))
         events = read_txt_into_list(eventlist_file)
         for _event in events:
             copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
                           deriv_cmt_list)
+            copy_stations(_event, stafolder, targetstadir)
+
 
         print("Copy dir:[%s --> %s]" % (template_folder, targetdir))
         # copy scripts template
@@ -148,6 +158,7 @@ if __name__ == "__main__":
     tag = config["job_tag"]
     running_mode = config["running_mode"]
     cmtfolder = config["cmtfolder"]
+    stafolder = config["stationfolder"]
     generate_deriv_cmt = config["generate_deriv_cmt"]
     deriv_cmt_list = config["deriv_cmt_list"]
     if running_mode == "bundle":
@@ -156,5 +167,5 @@ if __name__ == "__main__":
         template_folder = "./job_running_template/template_single"
 
     create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
-                      generate_deriv_cmt, deriv_cmt_list)
+                      stafolder, generate_deriv_cmt, deriv_cmt_list)
 
