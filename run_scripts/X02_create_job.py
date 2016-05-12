@@ -134,11 +134,11 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
         copytree(template_folder, targetdir)
 
         # copy config.yaml file
-        copyfile("config.yaml", os.path.join(targetdir, "config.yaml"))
+        copyfile("config.yml", os.path.join(targetdir, "config.yml"))
 
 
 if __name__ == "__main__":
-    config_file = "config.yaml"
+    config_file = "config.yml"
     with open(config_file) as fh:
         config = yaml.load(fh)
 

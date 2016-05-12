@@ -12,7 +12,7 @@ def safe_copy(fn, specfemdir, targetdir):
     target_file = os.path.join(targetdir, fn)
     if not os.path.exists(origin_file):
         raise ValueError("No such file: %s" % fn)
-    
+
     if not os.path.exists(os.path.dirname(target_file)):
         os.makedirs(os.path.dirname(target_file))
 
@@ -60,16 +60,16 @@ if __name__ == "__main__":
 
     print("******************************************")
     print("Please specify the directory of specfem")
-    specfemdir=raw_input("specfemdir=")
+    specfemdir = raw_input("specfemdir=")
 
-    targetdir="."
+    targetdir = "."
 
     if not os.path.exists(specfemdir):
         raise ValueError("No specfem dir: %s" % specfemdir)
 
-    filelist=["bin/xspecfem3D", "OUTPUT_FILES/addressing.txt", 
-              "OUTPUT_FILES/values_from_mesher.h", "DATA/STATIONS",
-              "DATA/Par_file"]
+    filelist = ["bin/xspecfem3D", "OUTPUT_FILES/addressing.txt",
+                "OUTPUT_FILES/values_from_mesher.h", "DATA/STATIONS",
+                "DATA/Par_file"]
 
     quick_check(specfemdir, filelist)
 

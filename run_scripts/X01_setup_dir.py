@@ -15,7 +15,7 @@ def safe_makedir(dirname):
 
 if __name__ == "__main__":
 
-    with open("config.yaml") as fh:
+    with open("config.yml") as fh:
         config = yaml.load(fh)
 
     runbase_size = config["runbase_size"]
