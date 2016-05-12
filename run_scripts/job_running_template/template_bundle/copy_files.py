@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import os
 import glob
-import shutil
 from utils import cleantree, copytree, copyfile, read_txt_into_list
 from utils import check_exist
 
@@ -9,13 +8,13 @@ from utils import check_exist
 def copy_cmtfile(cmtfile, targetdir):
     destfile = os.path.join(targetdir, "DATA/CMTSOLUTION")
     copyfile(cmtfile, destfile)
-        
+
 
 def copy_derivative_cmtfile(cmtfile_prefix, destdir):
     if not os.path.exists(destdir):
         os.makedirs(destdir)
-    exts=("", "_Mrr", "_Mtt", "_Mpp", "_Mrt", "_Mrp", "_Mtp", 
-          "_dep", "_lat", "_lon")
+    exts = ("", "_Mrr", "_Mtt", "_Mpp", "_Mrt", "_Mrp", "_Mtp",
+            "_dep", "_lat", "_lon")
     for _ext in exts:
         cmtfile = cmtfile_prefix + _ext
         destcmt = os.path.join(destdir, os.path.basename(cmtfile))
@@ -34,7 +33,7 @@ def copy_specfem_stuff(specfemdir, targetdir):
 
 def check_mesh(targetdir):
     meshdir = os.path.join(targetdir, "DATABASES_MPI")
-    
+
     meshfiles = glob.glob(os.path.join(meshdir, "*"))
     if len(meshfiles) < 5:
         raise ValueError("No enough mesh files. Double check:%s" % targetdir)
@@ -42,9 +41,9 @@ def check_mesh(targetdir):
 
 def copy_files():
 
-    cmtcenter="cmtfile"
-    eventfile="XEVENTID"
-    scratch_dir="../.."
+    cmtcenter = "cmtfile"
+    eventfile = "XEVENTID"
+    scratch_dir = "../.."
     specfemdir = os.path.join(scratch_dir, "specfem_stuff")
     datacenter = os.path.join(scratch_dir, "RUN_BASE")
 
@@ -68,9 +67,8 @@ def copy_files():
         print("targetdir: %s" % targetdir)
 
         copy_specfem_stuff(specfemdir, targetdir)
-        #copy_cmtfile(cmtfile, targetdir)
-        #copy_derivative_cmtfile(cmtfile, "cmtfile")
-        
+        # copy_cmtfile(cmtfile, targetdir)
+        # copy_derivative_cmtfile(cmtfile, "cmtfile")
         check_mesh(targetdir)
 
 

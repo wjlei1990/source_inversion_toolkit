@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # ###########################################################
-# Scripts that splits a large eventlist file. 
+# Scripts that splits a large eventlist file.
 # For example, you have a eventlist contains 320 events.
 # and you want to split it into 50 events/per file. There will
 # be 6 files generated. The first 5 files will have 50 events
@@ -10,8 +10,6 @@
 import os
 import glob
 import math
-import sys
-import shutil
 import yaml
 from utils import copytree, cleantree, copyfile
 from utils import read_txt_into_list
@@ -29,11 +27,11 @@ def split_eventlist(inputfile, njobs_bundle, outputdir, output_base):
     # read the input eventlist
     with open(inputfile, 'r') as f:
         content = f.readlines()
-    eventlist = [ line.rstrip('\n') for line in content ]
+    eventlist = [line.rstrip('\n') for line in content]
 
     nevents = len(eventlist)
     njobs = int(math.ceil(nevents/float(njobs_bundle)))
- 
+
     print("*"*20 + "\nSplit eventlist")
     print "Number of events:", nevents
     print "Jobs per bundle:", njobs_bundle
@@ -42,15 +40,15 @@ def split_eventlist(inputfile, njobs_bundle, outputdir, output_base):
     eventlist_dict = {}
     for i in range(1, njobs+1):
         start_index = (i-1) * njobs_bundle
-        end_index = min( i*njobs_bundle, nevents )
-        outputfn = os.path.join(outputdir, "%s%d" %(output_base, i))
-        print("job: %3d -- event index: [%4d --> %4d) -- output: %s" % 
-                (i, start_index, end_index, outputfn))
+        end_index = min(i*njobs_bundle, nevents)
+        outputfn = os.path.join(outputdir, "%s%d" % (output_base, i))
+        print("job: %3d -- event index: [%4d --> %4d) -- output: %s" %
+              (i, start_index, end_index, outputfn))
         with open(outputfn, 'w') as f:
             for _ind in range(start_index, end_index):
                 f.write("%s\n" % eventlist[_ind])
         eventlist_dict[i] = outputfn
-    
+
     return eventlist_dict
 
 
@@ -70,11 +68,11 @@ def check_job_folder_exist(targetdir_list):
                     os.makedirs(_dir)
                 else:
                     cleantree(_dir)
-        elif anser == "n":
-            raise ValueError("Quit as requested") 
+        elif answer == "n":
+            raise ValueError("Quit as requested")
         else:
             raise ValueError("Incorrect input")
- 
+
 
 def copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
                   deriv_cmt_list):
@@ -84,13 +82,13 @@ def copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
     if not generate_deriv_cmt:
         # copy deriv cmt files
         for deriv_type in deriv_cmt_list:
-            derivcmt = os.path.join(cmtfolder, "%s_%s" % (_event, deriv_type)) 
-            targetcmt = os.path.join(targetcmtdir, "%s_%s" 
+            derivcmt = os.path.join(cmtfolder, "%s_%s" % (_event, deriv_type))
+            targetcmt = os.path.join(targetcmtdir, "%s_%s"
                                      % (_event, deriv_type))
             copyfile(derivcmt, targetcmt, verbose=False)
     else:
         # copy scripts to generate deriv cmt files
-        copytree("job_running_template/perturb_cmt", 
+        copytree("job_running_template/perturb_cmt",
                  os.path.dirname(targetcmtdir))
 
 
@@ -131,7 +129,6 @@ def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
                           deriv_cmt_list)
             copy_stations(_event, stafolder, targetstadir)
 
-
         print("Copy dir:[%s --> %s]" % (template_folder, targetdir))
         # copy scripts template
         copytree(template_folder, targetdir)
@@ -151,7 +148,7 @@ if __name__ == "__main__":
 
     # split event list
     eventfile = config["total_eventfile"]
-    eventlist_dict = split_eventlist(eventfile, runbase_size, eventlist_dir, 
+    eventlist_dict = split_eventlist(eventfile, runbase_size, eventlist_dir,
                                      eventlist_base)
 
     # create job folder
@@ -168,4 +165,3 @@ if __name__ == "__main__":
 
     create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,
                       stafolder, generate_deriv_cmt, deriv_cmt_list)
-

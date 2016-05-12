@@ -29,7 +29,7 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx,
 
     content = fi.readlines()
 
-    full_ext_list = ["Mrr", "Mtt", "Mpp", "Mrt", "Mrp", "Mtp", 
+    full_ext_list = ["Mrr", "Mtt", "Mpp", "Mrt", "Mrp", "Mtp",
                      "dep", "lon", "lat"]
 
     ext_list = "ext=( \"\" "
@@ -41,13 +41,13 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx,
     print "ext_list:", ext_list
 
     for line in content:
-        line = re.sub(r"^#PBS -l nodes=.*", "#PBS -l nodes=%d" % 
+        line = re.sub(r"^#PBS -l nodes=.*", "#PBS -l nodes=%d" %
                       nnodes, line)
-        line = re.sub(r"^#PBS -l walltime=.*", "#PBS -l walltime=%s" % 
+        line = re.sub(r"^#PBS -l walltime=.*", "#PBS -l walltime=%s" %
                       walltime, line)
-        line = re.sub(r"^eventfile=.*", "eventfile=\"%s\"" % 
+        line = re.sub(r"^eventfile=.*", "eventfile=\"%s\"" %
                       eventfile, line)
-        line = re.sub(r"^event_index=.*", "event_index=%d" % 
+        line = re.sub(r"^event_index=.*", "event_index=%d" %
                       (start_idx+1), line)
         line = re.sub(r"^ext=.*", ext_list, line)
 
@@ -55,11 +55,11 @@ def modify_job_sbatch_file(inputfile, outputfile, eventfile, start_idx,
         line = re.sub(r"./bin/xspecfem3D &", "./bin/xspecfem3D", line)
         line = re.sub(r"^wait", "#wait", line)
 
-        fo.write(line) 
+        fo.write(line)
 
 
 def create_job_pbs(nevents_per_job, walltime_per_simulation, deriv_cmt_list):
-    
+
     nnodes_per_simulation = extract_number_of_nodes()
     # User parameter
     walltime = "%d:00:00" % int(walltime_per_simulation*nevents_per_job)
@@ -70,7 +70,7 @@ def create_job_pbs(nevents_per_job, walltime_per_simulation, deriv_cmt_list):
     sub_eventfile_prefix = "XEVENTID_"
     sub_sbatch_prefix = "job_solver_bundle.pbs."
 
-    # remove old files 
+    # remove old files
     filelist = glob.glob(sub_eventfile_prefix+"*")
     for fn in filelist:
         os.remove(fn)
@@ -80,29 +80,29 @@ def create_job_pbs(nevents_per_job, walltime_per_simulation, deriv_cmt_list):
 
     eventlist = read_txt_into_list(eventlist_file)
     nevents = len(eventlist)
-    njobs = int(math.ceil( float(nevents) / nevents_per_job))
+    njobs = int(math.ceil(float(nevents) / nevents_per_job))
 
     print "====== Create job scripts ======="
-    print "Number of events:", nevents 
+    print "Number of events:", nevents
     print "Number of jobs:", njobs
 
     for ijob in range(njobs):
         # determine index
         print "-----------"
         print "Jobid: %d" % (ijob + 1)
-        start_idx = ijob * nevents_per_job 
+        start_idx = ijob * nevents_per_job
         end_idx = (ijob + 1) * nevents_per_job
         if ijob == njobs-1:
             end_idx = nevents
         print "start and end idx: [%d, %d)" % (start_idx, end_idx)
 
         # create sub-eventlist file
-        eventfile = "%s%d" %(sub_eventfile_prefix, ijob+1)
+        eventfile = "%s%d" % (sub_eventfile_prefix, ijob+1)
         print "eventlist file: %s" % eventfile
         write_list_to_txt(eventlist[start_idx:end_idx], eventfile)
 
         # create job pbs script
-        outputfn = "%s%d" %(sub_sbatch_prefix, ijob+1)
+        outputfn = "%s%d" % (sub_sbatch_prefix, ijob+1)
         print "jobs batch file: %s" % outputfn
         modify_job_sbatch_file(job_template, outputfn, eventfile, start_idx,
                                nnodes_per_simulation, walltime, deriv_cmt_list)

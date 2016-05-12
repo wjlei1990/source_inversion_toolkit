@@ -12,7 +12,7 @@ from utils import get_permission
 
 
 def perturb_cmt(cmtdir, dmoment_tensor, dlatitude, dlongitude, ddepth):
-    
+
     with open("XEVENTID") as fh:
         content = fh.readlines()
     eventlist = [x.rstrip("\n") for x in content]
@@ -28,8 +28,8 @@ def perturb_cmt(cmtdir, dmoment_tensor, dlatitude, dlongitude, ddepth):
 
 
 def prepare_dir():
-    with open("./config.yaml") as fh:                                          
-        config = yaml.load(fh)                                                  
+    with open("./config.yaml") as fh:
+        config = yaml.load(fh)
 
     # copy specfem stuff
     copy_files()
@@ -45,8 +45,8 @@ def prepare_dir():
         perturb_cmt(cmtdir, dmoment_tensor, dlatitude, dlongitude, ddepth)
 
     # create job pbs files
-    nevents_per_job = config["nevents_per_job"]                                 
-    walltime_per_simulation = config["walltime_per_simulation"] 
+    nevents_per_job = config["nevents_per_job"]
+    walltime_per_simulation = config["walltime_per_simulation"]
     deriv_cmt_list = config["deriv_cmt_list"]
     create_job_pbs(nevents_per_job, walltime_per_simulation, deriv_cmt_list)
 
