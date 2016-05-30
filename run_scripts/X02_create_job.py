@@ -93,9 +93,10 @@ def copy_cmtfiles(_event, cmtfolder, targetcmtdir, generate_deriv_cmt,
 
 
 def copy_stations(_event, stationfolder, targetstadir):
-    originsta = os.path.join(stationfolder, "%s.STATIONS" % _event)
-    targetsta = os.path.join(targetstadir, "%s.STATIONS" % _event)
-    copyfile(originsta, targetsta, verbose=False)
+    originsta = os.path.join(stationfolder, "STATIONS.%s" % _event)
+    targetsta = os.path.join(targetstadir, "STATIONS.%s" % _event)
+    if os.path.exists(originsta):
+        copyfile(originsta, targetsta, verbose=False)
 
 
 def create_job_folder(template_folder, tag, eventlist_dict, cmtfolder,

@@ -79,7 +79,7 @@ def gen_cmt_wrapper(input_cmt, dmoment_tensor=None, ddepth=None,
 
 if __name__ == '__main__':
 
-    with open("config.yaml") as fh:
+    with open("config.yml") as fh:
         config = yaml.load(fh)
 
     dmoment_tensor = config["dmoment_tensor"]

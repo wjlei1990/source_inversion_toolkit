@@ -123,7 +123,7 @@ def extract_number_of_nodes():
     return nproc
 
 if __name__ == "__main__":
-    with open("./config.yaml") as fh:
+    with open("./config.yml") as fh:
         config = yaml.load(fh)
     nevents_per_job = config["nevents_per_job"]
     walltime_per_simulation = config["walltime_per_simulation"]

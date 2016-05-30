@@ -17,7 +17,6 @@ import collections
 import numpy as np
 import obspy
 from obspy.core.util.geodetics import FlinnEngdahl
-from obspy.signal.filter import lowpass
 import obspy.xseed
 import os
 from scipy import interp

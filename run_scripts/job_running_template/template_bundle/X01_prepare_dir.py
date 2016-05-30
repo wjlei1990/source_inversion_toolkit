@@ -28,7 +28,7 @@ def perturb_cmt(cmtdir, dmoment_tensor, dlatitude, dlongitude, ddepth):
 
 
 def prepare_dir():
-    with open("./config.yaml") as fh:
+    with open("./config.yml") as fh:
         config = yaml.load(fh)
 
     # copy specfem stuff
