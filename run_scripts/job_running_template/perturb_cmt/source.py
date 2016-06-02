@@ -16,8 +16,6 @@ from __future__ import (absolute_import, division, print_function,
 import collections
 import numpy as np
 import obspy
-from obspy.core.util.geodetics import FlinnEngdahl
-import obspy.xseed
 import os
 from scipy import interp
 import warnings

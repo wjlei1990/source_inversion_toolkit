@@ -7,28 +7,27 @@ cmtfolder: "/ccs/home/lei/SOURCE_INVERSION/iter0/event_base/cmts"
 # for example: C200501121652A.STATIONS
 stationfolder: "/ccs/home/lei/SOURCE_INVERSION/STATIONS"
 
-# Size of your database. If you set the number to 10, then
-# it means 10 copies of specfem will be copied. The runbase_size
-# depends on how large disk size is since the model file is large
-runbase_size: 50
+---
+# RUNBASE: the runbase is the directory where holds all running files
+# So make sure that your runbase is large enough to hold everything
+runbase: "/lustre/atlas/proj-shared/geo111/Wenjie/test/test_runbase"
 
 # The large eventfile you want to split
-total_eventfile: "/ccs/home/lei/SOURCE_INVERSION/iter0/event_base/inter.log.cmtlist"
+total_eventfile: "inter.log.cmtlist"
 
 # job sub-folder tag
-job_tag: "si_inter"
+job_tag: "si_test"
 
-# job running mode: "bundle" or "single"
-# "bundle": bundle all forward simulation for one source in
-#   one folder(preferred);
-# "single": keep every single forward simulation in different
-#   folder.
-running_mode: "bundle"
-# number of events in one pbs job
-nevents_per_job: 1
-# walltime for one forward simulation
-walltime_per_simulation: 2
+# job running mode: "simul"
+# this branch only support simultaneous run, which means you use one mpirun to
+# excute multiple simulation at the same time
+running_mode: "simul"
+# number of events in one job(with simultaneous run)
+nevents_per_mpirun: 2
+# walltime for one forward simulation(unit is minutes)
+walltime_per_simulation: 12
 
+---
 # Generate derivative CMTSOLUTION file
 # If false, then you need to generate the derivative CMT
 # externally(put them the same directory same as "cmtfolder")
