@@ -50,9 +50,9 @@ do
   do
     echo "-------"
     event_index_name=`printf "%04d" $event_idx`
-    workingdir="$runbase/run_$event_index_name"
-    echo "Idx $event_index_name --- event $event"
-    echo "working dir $workingdir"
+    workingdir="$runbase/run$event_index_name"
+    echo "Idx: $event_index_name --- event $event"
+    echo "working dir: $workingdir"
 
     ### LINK HERE
     linkbase=$currentdir"/outputbase/"$event$ext
@@ -64,11 +64,13 @@ do
 
   # job running
   echo
-  echo "solver start: `date`"
   cd $runbase
+  echo "pwd: `pwd`"
+  ls -alh
+  echo "solver start: `date`"
   aprun -n $numproc -N1 ./bin/xspecfem3D
-  cd $currentdir
   echo "solver end: `date`"
+  cd $currentdir
 
   echo "Remove symbolic links..."
   event_idx=1
@@ -76,7 +78,7 @@ do
   do
     # UNLINK HERE
     event_index_name=`printf "%04d" $event_idx`
-    workingdir="$runbase/run_$event_index_name"
+    workingdir="$runbase/run$event_index_name"
     rm $workingdir"/DATA"
     rm $workingdir"/OUTPUT_FILES"
 

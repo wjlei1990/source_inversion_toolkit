@@ -45,14 +45,14 @@ def setup_simul_run(runbase, nruns):
     specfemdir = os.path.join(runbase, "specfem3d_globe")
 
     # clean previous run_**** first
-    dirlist = glob.glob(os.path.join(specfemdir, "run_*"))
+    dirlist = glob.glob(os.path.join(specfemdir, "run*"))
     print("remove dirlist: ", dirlist)
     for _dir in dirlist:
         shutil.rmtree(_dir)
 
     for i in range(nruns):
         job_idx = i + 1
-        sub_dir = os.path.join(specfemdir, "run_%04d" % job_idx)
+        sub_dir = os.path.join(specfemdir, "run%04d" % job_idx)
         print("Working on job running sub-dir: %s" % sub_dir)
         safe_makedir(sub_dir)
         if job_idx == 1:
