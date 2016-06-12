@@ -10,20 +10,20 @@ stationfolder: "/ccs/home/lei/SOURCE_INVERSION/STATIONS"
 ---
 # RUNBASE: the runbase is the directory where holds all running files
 # So make sure that your runbase is large enough to hold everything
-runbase: "/lustre/atlas/proj-shared/geo111/Wenjie/test/test_runbase"
+runbase: "/lustre/atlas/proj-shared/geo111/Wenjie/si_runbase"
 
 # The large eventfile you want to split
 total_eventfile: "inter.log.cmtlist"
 
 # job sub-folder tag
-job_tag: "si_test"
+job_tag: "si_inter_part1"
 
 # job running mode: "simul"
 # this branch only support simultaneous run, which means you use one mpirun to
 # excute multiple simulation at the same time
 running_mode: "simul"
 # number of events in one job(with simultaneous run)
-nevents_per_mpirun: 2
+nevents_per_mpirun: 50
 # walltime for one forward simulation(unit is minutes)
 walltime_per_simulation: 12
 

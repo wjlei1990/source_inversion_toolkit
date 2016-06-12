@@ -3,6 +3,10 @@
 #PBS -A GEO111
 #PBS -N SPECFEM3D_solver
 #PBS -j oe
+#PBS -m a
+#PBS -m b
+#PBS -m e
+#PBS -M lei@princeton.edu
 #PBS -o job_sb.$PBS_JOBID.o
 #PBS -l nodes=384
 #PBS -l walltime=2:00:00
