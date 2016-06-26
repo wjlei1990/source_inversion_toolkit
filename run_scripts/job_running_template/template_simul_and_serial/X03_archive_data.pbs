@@ -1,0 +1,75 @@
+#!/bin/bash
+############################################################################
+# Batch script to copy the OUTPUT file of simulation to archive using dtn
+# ###
+# First,then using HTAR to tar and copy files to the archive dir
+# Second, it moves all the files to a final place(for future use)
+# 
+# Usage: qsub -q dtn archive_data.pbs
+############################################################################
+
+#PBS -A GEO111
+#PBS -l walltime=20:00:00
+#PBS -j oe
+#PBS -o archive.$PBS_JOBID.o
+
+#######################
+workdir="./data"
+eventfile="XEVENTID"
+finaldir="../../Archive"
+ext=( "" "_Mrr" "_Mtt" "_Mpp" "_Mrt" "_Mrp" "_Mtp" "_dep" "_lat" "_lon" )
+#######################
+
+echo "Start at: `date`"
+cd $PBS_O_WORKDIR
+
+./check_job_status.bash > job_temp.log
+
+job_status=`cat job.log`
+echo "Job Status: $job_status"
+
+if [ "$job_status" == "Fail" ]; then
+  echo "Job not done yet! Quit"
+  exit
+fi
+
+### check the number of events
+if [ ! -f $eventfile ]; then
+  echo WRONG! NO $eventfile
+  exit
+fi
+nevents=`cat $eventfile | wc -l`
+echo "number of events: $nevents"
+if [ $nevents -eq 0 ]; then
+  echo "0 event. Check XEVENTID file!"
+  exit
+else 
+  echo "Nevents: $nevents"
+fi
+
+#HTAR file
+date_string=`date +"%m-%d-%y_%T"`
+tarfile="/home/lei/SOURCE_INVERSION/DATA/data_$date_string.tar"
+echo $tarfile > archive.log
+echo "======================"
+echo "tarfile: $tarfile"
+echo "Current dir:`pwd`"
+echo "htar -cf $tarfile $workdir"
+htar -cf $tarfile $workdir
+
+echo "Archive Done"
+
+echo "======================"
+echo "Clean archive dir"
+for event in `cat $eventfile`
+do
+  rm -r $finaldir/$event*
+done
+
+echo "======================"
+echo "Move data to final place"
+mkdir -p $finaldir
+echo "mv $workdir/* $finaldir"
+mv -f $workdir/* $finaldir
+
+echo "Done at `date`"

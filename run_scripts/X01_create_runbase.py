@@ -5,7 +5,7 @@
 # Developer: Wenjie Lei
 # -------------------
 # Directory structure:
-#   runbase/
+#   $runbase/
 #     archive/           # archive directory to store output data
 #     jobs/              # directory of job scripts
 #     specfem3d_globe/   # specfem directory
@@ -22,10 +22,15 @@ from utils import safe_makedir
 
 def check_config(config):
     running_mode = config[1]["running_mode"]
-    if running_mode != "simul":
-        raise ValueError("Only running_mode 'simul' is allowed")
+    _options = ["simul", "simul_and_serial", "serial"]
+    if running_mode not in _options:
+        raise ValueError("running mode(%s) not supported: %s"
+                         % (running_mode, _options))
 
-    nevents_per_mpirun = config[1]["nevents_per_mpirun"]
+    if config[1]["nsimul_serial"] < 1:
+        raise ValueError("nsimul_serial(%d) can not be less than 1")
+
+    nevents_per_mpirun = config[1]["nevents_per_simul_run"]
     if nevents_per_mpirun <= 1:
         raise ValueError("nevents_per_mpirun should be larger than 1")
 

@@ -1,29 +1,32 @@
 # CMT folder: directory where you store cmt files
-cmtfolder: "/ccs/home/lei/SOURCE_INVERSION/iter0/event_base/cmts"
+cmtfolder: "/ccs/home/lei/SOURCE_INVERSION/iter0/cmt_origin"
 
 # station folder
 # setting different station files for different simulations(sources)
 # station file should be named as: eventname.STATIONS
 # for example: C200501121652A.STATIONS
-stationfolder: "/ccs/home/lei/SOURCE_INVERSION/STATIONS"
+stationfolder: "/ccs/home/lei/SOURCE_INVERSION/iter0/STATIONS"
 
 ---
 # RUNBASE: the runbase is the directory where holds all running files
 # So make sure that your runbase is large enough to hold everything
-runbase: "/lustre/atlas/proj-shared/geo111/Wenjie/si_runbase"
+runbase: "/lustre/atlas/proj-shared/geo111/Wenjie/si_runbase_iter0"
 
 # The large eventfile you want to split
-total_eventfile: "inter.log.cmtlist"
+total_eventfile: "cmtlist.rest"
 
 # job sub-folder tag
-job_tag: "si_inter_part1"
+job_tag: "si_iter0"
 
 # job running mode: "simul"
 # this branch only support simultaneous run, which means you use one mpirun to
 # excute multiple simulation at the same time
-running_mode: "simul"
+running_mode: "simul_and_serial"
+# number of serial run on top of simul runs(number of simultaneous runs in serial)
+# only used in "simul_and_serial" mode
+nsimul_serial: 5
 # number of events in one job(with simultaneous run)
-nevents_per_mpirun: 50
+nevents_per_simul_run: 50
 # walltime for one forward simulation(unit is minutes)
 walltime_per_simulation: 12
 
